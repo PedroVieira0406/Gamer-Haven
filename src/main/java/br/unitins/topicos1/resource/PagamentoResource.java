@@ -93,6 +93,6 @@ public class PagamentoResource {
     @RolesAllowed("Funcionario")
     public Response findAll() {
         LOG.debug("Requisição para buscar todas os Pagamenos recebida");
-        return Response.ok(service.getAll()).build();
+        return Response.ok(service.findAll()).build();
     }
 }

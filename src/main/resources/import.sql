@@ -71,21 +71,19 @@ VALUES
     (2, 2);
 
 -- Cartao
-INSERT INTO Cartao (cartaoMarca, nCartao, mesValid, anoValid, numSeguranca, nome, sobrenome, cep, cidade, pais, idCLiente)
+INSERT INTO cartao (cartaoMarca, nCartao, mesValid, anoValid, numSeguranca, nome, sobrenome, cep, cidade, pais, idCLiente)
 VALUES
     ('VISA', '1234567890123456', 12, 2024, 'j+Z+xmgZtP05avyaIysXHHnNH/N4LFtr6WCgYGgpMciYGzWUtilGg1bl7LQ2n4sadR/BQJEXjMrk1XRFg2jMSg==', 'roberto', 'Silva', 'São Paulo', '12345-678', 'Brasil', 1),
-    ('JCB', '1231544820132932', 9, 2025, 'j+Z+xmgZtP05avyaIysXHHnNH/N4LFtr6WCgYGgpMciYGzWUtilGg1bl7LQ2n4sadR/BQJEXjMrk1XRFg2jMSg==', 'Carla', 'Andrade', 'Rio de Janeiro', '54321-678', 'Brasil', 2);
+    ('JCB', '1231544820132932', 09, 2025, 'j+Z+xmgZtP05avyaIysXHHnNH/N4LFtr6WCgYGgpMciYGzWUtilGg1bl7LQ2n4sadR/BQJEXjMrk1XRFg2jMSg==', 'Carla', 'Andrade', 'Rio de Janeiro', '54321-678', 'Brasil', 2);
 
 -- Pagamento
-INSERT INTO Pagamento( cliente_id, status,valorcompra, valorPago, modoPagamento, cartao_id)
+INSERT INTO pagamento( cliente_id, status, valorcompra, valorPago, modoPagamento, cartao_id)
 VALUES
 (1, TRUE,000.0, 000.0, 'PIX', null),
-(1, TRUE,200.0, 200.0, 'PIX', null),
-(1, TRUE,200.0, 200.0, 'CREDITO', 1);
+(1, TRUE,200.0, 200.0, 'PIX', null);
 
 -- Compras
 INSERT INTO compra (preco, idPagante, idDono, idJogo,idPagamento)
 VALUES
     (0.0, 1, 2, 2,1),
-    (199.9, 1, 1, 1,2),
-    (199.9, 1, 2, 1,3);
+    (199.9, 1, 1, 1,2);

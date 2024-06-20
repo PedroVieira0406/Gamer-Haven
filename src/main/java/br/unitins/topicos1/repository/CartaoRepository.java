@@ -15,7 +15,7 @@ public class CartaoRepository implements PanacheRepository<Cartao> {
         }
         return find("cliente.id", idDono);
     }
-    public PanacheQuery<Cartao> findByNumeroECliente(String numero, Long idCliente) {
+    public Cartao findByNumeroECliente(String numero, Long idCliente) {
         if (numero == null || idCliente == null) {
             return null;
         }

@@ -13,7 +13,6 @@ public interface PagamentoService {
     PagamentoResponseDTO efetuarPagamento(Long id, PagamentoDTO dto);
     PagamentoResponseDTO findById(Long id);
     void delete(Long id);
-    List<PagamentoResponseDTO> getAll();
     List<PagamentoResponseDTO> findAll();
     List<PagamentoResponseDTO> findByCliente(Long idCliente);
     

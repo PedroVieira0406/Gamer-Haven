@@ -2,11 +2,11 @@ package br.unitins.topicos1.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import br.unitins.topicos1.dto.PagamentoDTO;
 import br.unitins.topicos1.dto.PagamentoResponseDTO;
 import br.unitins.topicos1.model.Cartao;
-import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Compra;
 import br.unitins.topicos1.model.Jogo;
 import br.unitins.topicos1.model.ModoPagamento;
@@ -15,7 +15,6 @@ import br.unitins.topicos1.repository.CartaoRepository;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.CompraRepository;
 import br.unitins.topicos1.repository.PagamentoRepository;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -44,13 +43,13 @@ public class PagamentoServiceImpl implements PagamentoService {
         Pagamento entity = new Pagamento();
         Compra compra = CompraRepository.findById(entity.getId());
         
-        entity.setCliente(acharPagante(dto.idCliente()));
+        entity.setClienteId(dto.idCliente());
         entity.setValorCompra(dto.valorCompra());
         entity.setValorPago(dto.valorPago());
         entity.setStatus(dto.status());
 
         entity.setModoPagamento(ModoPagamento.valueOf(dto.modoPagamento()));
-        entity.setCartao(acharCartao(dto.nCartao(),entity.getCliente().getId(),entity.getModoPagamento()));
+        entity.setCartao(acharCartao(dto.nCartao(),entity.getClienteId(),entity.getModoPagamento()));
 
         if(entity.isStatus()){
             //colocando o jogo na biblioteca do dono
@@ -69,14 +68,13 @@ public class PagamentoServiceImpl implements PagamentoService {
     public PagamentoResponseDTO update(Long id, PagamentoDTO dto){
         
         Pagamento entity = PagamentoRepository.findById(id);
-        PanacheQuery<Compra> query = CompraRepository.findByPagamento(entity.getId());
-        Compra compra = query.firstResult();
-        entity.setCliente(acharPagante(dto.idCliente()));
+        Compra compra = CompraRepository.findByPagamento(entity.getId());
+        entity.setClienteId(dto.idCliente());
         entity.setStatus(dto.status());
-        entity.setValorPago(dto.valorPago());
+        entity.setValorCompra(dto.valorCompra());
         entity.setValorPago(dto.valorPago());
         entity.setModoPagamento(ModoPagamento.valueOf(dto.modoPagamento()));
-        entity.setCartao(acharCartao(dto.nCartao(),entity.getCliente().getId(),entity.getModoPagamento()));
+        entity.setCartao(acharCartao(dto.nCartao(),entity.getClienteId(),entity.getModoPagamento()));
         if(entity.isStatus()){
             //colocando o jogo na biblioteca do dono
 
@@ -94,15 +92,14 @@ public class PagamentoServiceImpl implements PagamentoService {
     public PagamentoResponseDTO efetuarPagamento(Long id, PagamentoDTO dto){
         
         Pagamento entity = PagamentoRepository.findById(id);
-        PanacheQuery<Compra> query = CompraRepository.findByPagamento(entity.getId());
-        Compra compra = query.firstResult();
+        Compra compra = CompraRepository.findByPagamento(entity.getId());
         
         entity.setValorPago(dto.valorPago());
         if(entity.getValorPago()>= compra.getPreco()){
             entity.setStatus(true);
         }
         entity.setModoPagamento(ModoPagamento.valueOf(dto.modoPagamento()));
-        entity.setCartao(acharCartao(dto.nCartao(),entity.getCliente().getId(),entity.getModoPagamento()));
+        entity.setCartao(acharCartao(dto.nCartao(),entity.getClienteId(),entity.getModoPagamento()));
     
         return PagamentoResponseDTO.valueOf(entity);
     }
@@ -113,36 +110,14 @@ public class PagamentoServiceImpl implements PagamentoService {
         PagamentoRepository.deleteById(id);
     }
 
-    @Override
-    public List<PagamentoResponseDTO> getAll() {
-    List<Pagamento> pagamentos = PagamentoRepository.findAll().list();
-    List<PagamentoResponseDTO> responseDTOs = new ArrayList<>();
-
-    for (Pagamento pagamento : pagamentos) {
-        PagamentoResponseDTO dto = PagamentoResponseDTO.valueOf(pagamento);
-        responseDTOs.add(dto);
-    }
-
-    return responseDTOs;
-}
-
-    private Cliente acharPagante(long idCliente) {
-        Cliente cliente = clienteRepository.findById(idCliente);
-        if (cliente == null) {
-            throw new NotFoundException("Cliente não encontrada.");
-        }
-        return cliente;
-    }
-
     private Cartao acharCartao(String numero, long idCliente, ModoPagamento modoPagamento) {
         // Verifica se o modo de pagamento é PIX
         if (modoPagamento == ModoPagamento.PIX) {
             return null; // Retorna null se o modo de pagamento for PIX
         }
     
-        // Busca o cartão pelo número e id do cliente
-        PanacheQuery<Cartao> query = CartaoRepository.findByNumeroECliente(numero, idCliente);
-        Cartao cartao = query.firstResult();
+        // Busca o cartão pelo número e id do clientes
+        Cartao cartao = CartaoRepository.findByNumeroECliente(numero, idCliente);
     
         // Verifica se o cartão foi encontrado
         if (cartao == null) {
@@ -158,11 +133,13 @@ public class PagamentoServiceImpl implements PagamentoService {
         return PagamentoResponseDTO.valueOf(PagamentoRepository.findById(id));
     }
 
-
     @Override
-    public List<PagamentoResponseDTO> findAll(){
-        return PagamentoRepository.listAll().stream().map(Pagamento -> PagamentoResponseDTO.valueOf(Pagamento)).toList();
+    public List<PagamentoResponseDTO> findAll() {
+
+        List<Pagamento> list = PagamentoRepository.findAll().list();
+        return list.stream().map(e -> PagamentoResponseDTO.valueOf(e)).collect(Collectors.toList());
     }
+
     @Override
     public List<PagamentoResponseDTO> findByCliente(Long idCliente) {
         return PagamentoRepository.findByPagante(idCliente).stream()

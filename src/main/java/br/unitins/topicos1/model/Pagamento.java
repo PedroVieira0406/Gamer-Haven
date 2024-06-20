@@ -6,15 +6,12 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pagamento")
 public class Pagamento extends DefaultEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
+    @Column(name = "cliente_id", nullable = false)
+    private Long clienteId;
 
     @Column(nullable = false)
     private boolean status = false;
@@ -30,20 +27,10 @@ public class Pagamento extends DefaultEntity {
     private ModoPagamento modoPagamento;
 
     @ManyToOne
-    @JoinColumn(name = "cartao_id",nullable = true)
+    @JoinColumn(name = "cartao_id", nullable = true)
     private Cartao cartao;
 
     // Getters and Setters
-
-    
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
 
     public boolean isStatus() {
         return status;
@@ -83,5 +70,13 @@ public class Pagamento extends DefaultEntity {
 
     public void setValorCompra(float valorCompra) {
         this.valorCompra = valorCompra;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long idCliente) {
+        this.clienteId = idCliente;
     }
 }

@@ -14,7 +14,7 @@ import br.unitins.topicos1.model.Pagamento;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.CompraRepository;
 import br.unitins.topicos1.repository.JogoRepository;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import br.unitins.topicos1.repository.PagamentoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -33,6 +33,9 @@ public class CompraServiceImpl implements CompraService {
 
     @Inject
     public ClienteRepository clienteRepository;
+
+    @Inject
+    public PagamentoRepository pagamentoRepository;
 
 
     @Override
@@ -54,12 +57,16 @@ public class CompraServiceImpl implements CompraService {
         }
 
         Pagamento pagamento = new Pagamento();
-        pagamento.setCliente(compra.getPagante());
+        pagamento.setClienteId(compra.getPagante().getId());
         pagamento.setValorCompra(valor);
         pagamento.setValorPago(0.0f);
         pagamento.setCartao(null);
         pagamento.setModoPagamento(ModoPagamento.valueOf(1));
+        pagamento.setStatus(false);
         
+        pagamentoRepository.persist(pagamento);
+
+        compra.setPagamento(pagamento);
 
         compraRepository.persist(compra);
         return CompraResponseDTO.valueOf(compra);
@@ -70,8 +77,7 @@ public class CompraServiceImpl implements CompraService {
         // Verifica se o pagamento foi bem-sucedido
         if (pagamento.isStatus()) {
             // Obtém a compra associada ao pagamento
-            PanacheQuery<Compra> query = compraRepository.findByPagamento(pagamento.getId());
-            Compra compra = query.firstResult();
+            Compra compra = compraRepository.findByPagamento(pagamento.getId());
 
             // Verifica se a compra existe
             if (compra != null) {
@@ -87,8 +93,6 @@ public class CompraServiceImpl implements CompraService {
                 jogos.add(compra.getJogo());
                 compra.getDono().setBiblioteca(jogos);
 
-                // Atualiza a compra no repositório (ou o dono, se necessário)
-                compraRepository.persist(compra);
             } else {
                 throw new NotFoundException("Compra não encontrada para o pagamento fornecido.");
             }

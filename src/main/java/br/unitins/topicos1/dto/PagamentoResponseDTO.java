@@ -1,7 +1,6 @@
 package br.unitins.topicos1.dto;
 
 import br.unitins.topicos1.model.Cartao;
-import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.ModoPagamento;
 import br.unitins.topicos1.model.Pagamento;
 
@@ -9,7 +8,7 @@ public record PagamentoResponseDTO (
     Long id,
     Float valorCompra,
     Float valorPago,
-    Cliente pagante,
+    Long clienteId,
     Boolean statusPagamento,
     ModoPagamento modoPagamento,
     Cartao cartao
@@ -19,7 +18,7 @@ public record PagamentoResponseDTO (
             e.getId(),
             e.getValorCompra(),
             e.getValorPago(),
-            e.getCliente(),
+            e.getClienteId(),
             e.isStatus(),
             e.getModoPagamento(),
             e.getCartao()

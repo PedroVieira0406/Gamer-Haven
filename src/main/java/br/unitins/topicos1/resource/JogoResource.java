@@ -21,6 +21,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -40,9 +41,9 @@ public class JogoResource {
     @POST
     @RolesAllowed("Funcionario")
     public Response create(JogoDTO dto) {
-        LOG.info("Requisição para criar Jogo  ");
+        LOG.infof("Requisição para criar Jogo  ");
         JogoResponseDTO retorno = service.create(dto);
-        LOG.info("Jogo criado com sucesso");
+        LOG.infof("Jogo criado com sucesso");
         return Response.status(Status.CREATED).entity(retorno).build();
     }
 
@@ -50,9 +51,9 @@ public class JogoResource {
     @RolesAllowed("Funcionario")
     @Path("/update/{id}")
     public Response update(JogoDTO dto, @PathParam("id") Long id) {
-        LOG.info("Requisição para atualizar Jogo com ID: " + id  );
+        LOG.infof("Requisição para atualizar Jogo com ID: " + id  );
         service.update(id, dto);
-        LOG.info("Jogo com ID: " + id + " atualizado com sucesso");
+        LOG.infof("Jogo com ID: " + id + " atualizado com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -60,9 +61,9 @@ public class JogoResource {
     @RolesAllowed("Funcionario")
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
-        LOG.info("Requisição para deletar Jogo com ID: " + id  );
+        LOG.infof("Requisição para deletar Jogo com ID: " + id  );
         service.delete(id);
-        LOG.info("Jogo com ID: " + id + " deletado com sucesso");
+        LOG.infof("Jogo com ID: " + id + " deletado com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -76,7 +77,7 @@ public class JogoResource {
     @RolesAllowed("Funcionario")
     @Path("/search/id/{id}")
     public Response findById(@PathParam("id") Long id) {
-        LOG.info("Requisição para buscar Jogo pelo ID: " + id  );
+        LOG.infof("Requisição para buscar Jogo pelo ID: " + id  );
         return Response.ok(service.findById(id)).build();
     }
 
@@ -99,11 +100,13 @@ public class JogoResource {
     }
 
     @GET
+    @RolesAllowed({"Cliente","Funcionario"})
     @Path("/image/download/{nomeImagem}")
     public Response download(@PathParam("nomeImagem") String nomeImagem) {
-        LOG.info("Requisição para download da imagem: " + nomeImagem  );
-        return Response.ok(fileService.download(nomeImagem))
-                       .header("Content-Disposition", "attachment;filename=" + nomeImagem)
-                       .build();
+        LOG.info("Requisição para download de imagem do jogo com nome: " + nomeImagem  );
+        ResponseBuilder response = Response.ok(fileService.download(nomeImagem));
+        response.header("Content-Disposition", "attachment;filename=" + nomeImagem);
+        LOG.infof("Imagem do jogo com nome: " + nomeImagem + " salva com sucesso");
+        return response.build();
     }
 }

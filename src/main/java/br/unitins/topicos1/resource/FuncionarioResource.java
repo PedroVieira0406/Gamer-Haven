@@ -84,12 +84,14 @@ public class FuncionarioResource {
     @RolesAllowed("Funcionario")
     @Path("/search/nome/{nome}")
     public Response findByNome(@PathParam("nome") String nome) {
+        LOG.infof("Requisição para buscar Funcionario pelo nome: " + nome + " recebida");
         return Response.ok(service.findByNome(nome)).build();
     }
     @GET
     @RolesAllowed("Funcionario")
     @Path("/search/cargo/{cargo}")
     public Response findByCargo(@PathParam("cargo") String nome) {
+        LOG.infof("Requisição para buscar Funcionario pelo cargo: " + nome + " recebida");
         return Response.ok(service.findByCargo(nome)).build();
     }
 
@@ -98,7 +100,9 @@ public class FuncionarioResource {
     @Path("/{id}/image/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response upload(@PathParam("id") Long id, @MultipartForm ImageForm form) {
+        LOG.info("Requisição para upload de imagem do funcionario com ID: " + id  );
         fileService.salvar(id, form.getNomeImagem(), form.getImagem());
+        LOG.infof("Imagem do funcionario com ID: " + id + " salva com sucesso");
         return Response.noContent().build();
     }
 
@@ -106,8 +110,10 @@ public class FuncionarioResource {
     @RolesAllowed("Funcionario")
     @Path("/image/download/{nomeImagem}")
     public Response download(@PathParam("nomeImagem") String nomeImagem) {
+        LOG.info("Requisição para download de imagem do funcionario com nome: " + nomeImagem  );
         ResponseBuilder response = Response.ok(fileService.download(nomeImagem));
         response.header("Content-Disposition", "attachment;filename=" + nomeImagem);
+        LOG.infof("Imagem do funcionario com nome: " + nomeImagem + " salva com sucesso");
         return response.build();
     } 
     

@@ -45,9 +45,9 @@ public class PlataformaResource {
     @RolesAllowed("Funcionario")
     @Path("/update/{id}")
     public Response update(PlataformaDTO dto, @PathParam("id") Long id) {
-        LOG.info("Atualizando Plataforma com ID: " + id);
+        LOG.infof("Atualizando Plataforma com ID: " + id);
         service.update(id, dto);
-        LOG.info("Plataforma com ID: " + id + " atualizada com sucesso");
+        LOG.infof("Plataforma com ID: " + id + " atualizada com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -56,9 +56,9 @@ public class PlataformaResource {
     @RolesAllowed("Funcionario")
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
-        LOG.info("Deletando Plataforma com ID: " + id);
+        LOG.infof("Deletando Plataforma com ID: " + id);
         service.delete(id);
-        LOG.info("Plataforma com ID: " + id + " deletada com sucesso");
+        LOG.infof("Plataforma com ID: " + id + " deletada com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -72,14 +72,14 @@ public class PlataformaResource {
     @Path("/search/id/{id}")
     @RolesAllowed("Funcionario")
     public Response findById(@PathParam("id") Long id) {
-        LOG.info("Buscando Plataforma pelo ID: " + id);
+        LOG.infof("Buscando Plataforma pelo ID: " + id);
         return Response.ok(service.findById(id)).build();
     }
 
     @GET
     @Path("/search/nome/{nome}")
     public Response findByNome(@PathParam("nome") String nome) {
-        LOG.info("Buscando Plataforma pelo nome: " + nome);
+        LOG.infof("Buscando Plataforma pelo nome: " + nome);
         return Response.ok(service.findByNome(nome)).build();
     }
 }

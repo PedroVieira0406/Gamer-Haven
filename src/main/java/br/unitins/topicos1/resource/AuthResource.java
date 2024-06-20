@@ -1,5 +1,7 @@
 package br.unitins.topicos1.resource;
 
+import org.jboss.logging.Logger;
+
 import br.unitins.topicos1.dto.AuthLoginDTO;
 import br.unitins.topicos1.dto.LoginResponseDTO;
 import br.unitins.topicos1.service.ClienteService;
@@ -32,6 +34,8 @@ public class AuthResource {
     @Inject
     public JwtService jwtService;
 
+    private static final Logger LOG = Logger.getLogger(AuthResource.class);
+    
     @POST
     public Response login(AuthLoginDTO dto) {
         String hash = hashService.getHashSenha(dto.senha());
@@ -39,12 +43,17 @@ public class AuthResource {
         LoginResponseDTO usuario = null;
         // perfil 1 = Cliente
         if (dto.perfil() == 1) {
+            LOG.info("efetuando login em cliente");
             usuario = clienteService.login(dto.username(), hash);
         } else if (dto.perfil() == 2) { // Funcionario
+            LOG.info("efetuando login em funcionario");
             usuario = funcionarioService.login(dto.username(), hash);
         } else {
+            LOG.info("Login negado");
             return Response.status(Status.NOT_FOUND).build();
         }
+
+        LOG.info("Login realizado");
         return Response.ok(usuario)
             .header("Authorization", jwtService.generateJwt(usuario,dto.perfil()))
             .build();  

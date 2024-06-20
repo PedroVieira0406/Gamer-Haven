@@ -44,9 +44,9 @@ public class TemaResource {
     @RolesAllowed("Funcionario")
     @Path("/update/{id}")
     public Response update(@PathParam("id") Long id, TemaDTO dto) {
-        LOG.info("Atualizando Tema com ID: " + id);
+        LOG.infof("Atualizando Tema com ID: " + id);
         service.update(id, dto);
-        LOG.info("Tema com ID: " + id + " atualizado com sucesso");
+        LOG.infof("Tema com ID: " + id + " atualizado com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -55,9 +55,9 @@ public class TemaResource {
     @RolesAllowed("Funcionario")
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
-        LOG.info("Deletando Tema com ID: " + id);
+        LOG.infof("Deletando Tema com ID: " + id);
         service.delete(id);
-        LOG.info("Tema com ID: " + id + " deletado com sucesso");
+        LOG.infof("Tema com ID: " + id + " deletado com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -71,14 +71,14 @@ public class TemaResource {
     @RolesAllowed("Funcionario")
     @Path("/search/id/{id}")
     public Response findById(@PathParam("id") Long id) {
-        LOG.info("Buscando Tema pelo ID: " + id);
+        LOG.infof("Buscando Tema pelo ID: " + id);
         return Response.ok(service.findById(id)).build();
     }
 
     @GET
     @Path("/search/nome/{nome}")
     public Response findByNome(@PathParam("nome") String nome) {
-        LOG.info("Buscando Tema pelo nome: " + nome);
+        LOG.infof("Buscando Tema pelo nome: " + nome);
         return Response.ok(service.findByNome(nome)).build();
     }
 }

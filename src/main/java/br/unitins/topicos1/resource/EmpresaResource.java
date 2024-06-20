@@ -45,9 +45,9 @@ public class EmpresaResource {
     @RolesAllowed("Funcionario")
     @Path("/update/{id}")
     public Response update(EmpresaDTO dto, @PathParam("id") Long id) {
-        LOG.info("Requisição para atualizar Empresa com ID: " + id + " recebida");
+        LOG.infof("Requisição para atualizar Empresa com ID: " + id + " recebida");
         service.update(id, dto);
-        LOG.info("Empresa com ID: " + id + " atualizada com sucesso");
+        LOG.infof("Empresa com ID: " + id + " atualizada com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -56,9 +56,9 @@ public class EmpresaResource {
     @RolesAllowed("Funcionario")
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
-        LOG.info("Requisição para deletar Empresa com ID: " + id + " recebida");
+        LOG.infof("Requisição para deletar Empresa com ID: " + id + " recebida");
         service.delete(id);
-        LOG.info("Empresa com ID: " + id + " deletada com sucesso");
+        LOG.infof("Empresa com ID: " + id + " deletada com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -72,14 +72,14 @@ public class EmpresaResource {
     @RolesAllowed("Funcionario")
     @Path("/search/id/{id}")
     public Response findById(@PathParam("id") Long id) {
-        LOG.info("Requisição para buscar Empresa pelo ID: " + id + " recebida");
+        LOG.infof("Requisição para buscar Empresa pelo ID: " + id + " recebida");
         return Response.ok(service.findById(id)).build();
     }
 
     @GET
     @Path("/search/nome/{nome}")
     public Response findByNome(@PathParam("nome") String nome) {
-        LOG.info("Requisição para buscar Empresa pelo nome: " + nome + " recebida");
+        LOG.infof("Requisição para buscar Empresa pelo nome: " + nome + " recebida");
         return Response.ok(service.findByNome(nome)).build();
     }
 }

@@ -46,9 +46,9 @@ public class PagamentoResource {
     @RolesAllowed("Funcionario")
     @Path("/update/{id}")
     public Response update(PagamentoDTO dto, @PathParam("id") Long id) {
-        LOG.info("Atualizando Pagamento com ID: " + id);
+        LOG.infof("Atualizando Pagamento com ID: " + id);
         service.update(id, dto);
-        LOG.info("Pagamento com ID: " + id + " atualizada com sucesso");
+        LOG.infof("Pagamento com ID: " + id + " atualizada com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -57,9 +57,9 @@ public class PagamentoResource {
     @RolesAllowed({"Cliente","Funcionario"})
     @Path("/efetivacao/{id}")
     public Response efetuarPagamento(PagamentoDTO dto, @PathParam("id") Long id) {
-        LOG.info("Efetuando pagamento com ID: " + id);
+        LOG.infof("Efetuando pagamento com ID: " + id);
         service.update(id, dto);
-        LOG.info("pagamento com ID: " + id + " efetuado com sucesso");
+        LOG.infof("pagamento com ID: " + id + " efetuado com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }
 
@@ -68,6 +68,7 @@ public class PagamentoResource {
     @RolesAllowed("Funcionario")
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
+        LOG.infof("Efetuando delete do funcionario com id:"+id);
         service.delete(id);
         return Response.status(Status.NO_CONTENT).build();
     }
@@ -76,7 +77,7 @@ public class PagamentoResource {
     @RolesAllowed("Funcionario")
     @Path("/search/id/{id}")
     public Response findById(@PathParam("id") Long id) {
-        LOG.info("Buscando Pagamento pelo ID: " + id);
+        LOG.infof("Buscando Pagamento pelo ID: " + id);
         return Response.ok(service.findById(id)).build();
     }
 
@@ -84,7 +85,7 @@ public class PagamentoResource {
     @RolesAllowed({"Cliente","Funcionario"})
     @Path("/search/cliente/{id}")
     public Response findByCliente(@PathParam("id") Long idCliente) {
-        LOG.info("Buscando Pagamento pelo ID do Cliente: " + idCliente);
+        LOG.infof("Buscando Pagamento pelo ID do Cliente: " + idCliente);
         return Response.ok(service.findByCliente(idCliente)).build();
     }
 

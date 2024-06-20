@@ -27,7 +27,7 @@ public class Pagamento extends DefaultEntity {
     private ModoPagamento modoPagamento;
 
     @ManyToOne
-    @JoinColumn(name = "cartao_id")
+    @JoinColumn(name = "cartao_id",nullable = true)
     private Cartao cartao;
 
     // Getters and Setters

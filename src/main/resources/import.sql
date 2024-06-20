@@ -68,6 +68,7 @@ VALUES
 INSERT INTO biblioteca (idCliente, idJogo)
 VALUES
     (1, 1),
+    (2, 1),
     (2, 2);
 
 -- Cartao

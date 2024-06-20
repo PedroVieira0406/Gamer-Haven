@@ -63,39 +63,43 @@ public class CompraServiceImpl implements CompraService {
         pagamento.setCartao(null);
         pagamento.setModoPagamento(ModoPagamento.valueOf(1));
         pagamento.setStatus(false);
-        
-        pagamentoRepository.persist(pagamento);
+        if(valor == 0.0)
+        pagamento.setStatus(true);
 
+        pagamentoRepository.persist(pagamento);
         compra.setPagamento(pagamento);
 
         compraRepository.persist(compra);
+
+        //caso o valor seja 0 a compra vai ser efetiva automaticamente
+        if(pagamento.isStatus())ativandoJogo(pagamento.getId());
+
         return CompraResponseDTO.valueOf(compra);
     }
 
     @Transactional
-    public void ativandoJogo(Pagamento pagamento) {
-        // Verifica se o pagamento foi bem-sucedido
+    public void ativandoJogo(Long idPagamento) {
+        Pagamento pagamento = acharPagamento(idPagamento);
+    // Verifica se o pagamento foi bem-sucedido
         if (pagamento.isStatus()) {
-            // Obtém a compra associada ao pagamento
-            Compra compra = compraRepository.findByPagamento(pagamento.getId());
+        // Obtém a compra associada ao pagamento
+        Compra compra = compraRepository.findByPagamento(pagamento.getId());
+        Cliente cliente = compra.getDono();
+        List<Jogo> biblioteca = cliente.getBiblioteca();
 
-            // Verifica se a compra existe
-            if (compra != null) {
-                // Obtém a biblioteca do dono da compra
-                List<Jogo> jogos = compra.getDono().getBiblioteca();
+        // Verifica se a biblioteca é nula e inicializa se necessário
+        if (biblioteca == null) {
+            biblioteca = new ArrayList<>();
+        }
 
-                // Verifica se a biblioteca é nula e inicializa se necessário
-                if (jogos == null) {
-                    jogos = new ArrayList<>();
-                }
+        // Adiciona o jogo à biblioteca do cliente
+        biblioteca.add(compra.getJogo());
+        cliente.setBiblioteca(biblioteca);
 
-                // Adiciona o jogo à biblioteca do dono
-                jogos.add(compra.getJogo());
-                compra.getDono().setBiblioteca(jogos);
+        clienteRepository.persist(cliente); // Persiste as mudanças na biblioteca do cliente
 
-            } else {
-                throw new NotFoundException("Compra não encontrada para o pagamento fornecido.");
-            }
+        } else {
+            throw new NotFoundException("Pagamento não encontrado para o pagamento fornecido.");
         }
     }
 
@@ -116,6 +120,14 @@ public class CompraServiceImpl implements CompraService {
             throw new NotFoundException("cliente não encontrada.");
         }
         return cliente;
+    }
+
+    private Pagamento acharPagamento(long idPagamento) {
+        Pagamento pagamento = pagamentoRepository.findById(idPagamento);
+        if (pagamento == null) {
+            throw new NotFoundException("cliente não encontrada.");
+        }
+        return pagamento;
     }
 
     private Cliente acharDono(long idCliente) {

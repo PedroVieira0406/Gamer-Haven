@@ -7,9 +7,11 @@ import br.unitins.topicos1.dto.CompraResponseDTO;
 import br.unitins.topicos1.service.CompraService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -37,11 +39,12 @@ public class CompraResource {
         return Response.status(Status.CREATED).entity(retorno).build();
     }
 
-    @POST
+    @PUT
+    @Transactional
     @RolesAllowed({"Cliente","Funcionario"})
     @Path("/ativacao/id/{id}")
     public Response ativarJogo(@PathParam("id") Long id){
-        LOG.infof("Ativando jogo apartir do pagamento do ID" + id);
+        LOG.infof("Ativando jogo apartir do pagamento do ID: " + id);
         return Response.ok("Jogo ativado com sucesso.").build();
     }
 

@@ -2,6 +2,7 @@ package br.unitins.topicos1.resource;
 
 import org.jboss.logging.Logger;
 
+import br.unitins.topicos1.dto.EfetuarPagamentoDTO;
 import br.unitins.topicos1.dto.PagamentoDTO;
 import br.unitins.topicos1.dto.PagamentoResponseDTO;
 import br.unitins.topicos1.service.PagamentoService;
@@ -56,9 +57,9 @@ public class PagamentoResource {
     @Transactional
     @RolesAllowed({"Cliente","Funcionario"})
     @Path("/efetivacao/{id}")
-    public Response efetuarPagamento(PagamentoDTO dto, @PathParam("id") Long id) {
+    public Response efetuarPagamento(EfetuarPagamentoDTO dto, @PathParam("id") Long id) {
         LOG.infof("Efetuando pagamento com ID: " + id);
-        service.update(id, dto);
+        service.efetuarPagamento(id, dto);
         LOG.infof("pagamento com ID: " + id + " efetuado com sucesso");
         return Response.status(Status.NO_CONTENT).build();
     }

@@ -11,9 +11,10 @@ public record PagamentoResponseDTO (
     Long clienteId,
     Boolean statusPagamento,
     ModoPagamento modoPagamento,
-    Cartao cartao
+    CartaoResponseDTO cartao
 ) {
     public static PagamentoResponseDTO valueOf(Pagamento e) {
+        Cartao cartao = e.getCartao();
         return new PagamentoResponseDTO(
             e.getId(),
             e.getValorCompra(),
@@ -21,7 +22,7 @@ public record PagamentoResponseDTO (
             e.getClienteId(),
             e.isStatus(),
             e.getModoPagamento(),
-            e.getCartao()
+            cartao != null ? CartaoResponseDTO.valueOf(cartao) : null
         );
     }
 }

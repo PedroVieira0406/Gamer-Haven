@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.unitins.topicos1.dto.EfetuarPagamentoDTO;
 import br.unitins.topicos1.dto.PagamentoDTO;
 import br.unitins.topicos1.dto.PagamentoResponseDTO;
 import br.unitins.topicos1.model.Cartao;
@@ -89,7 +90,7 @@ public class PagamentoServiceImpl implements PagamentoService {
 
     @Override
     @Transactional
-    public PagamentoResponseDTO efetuarPagamento(Long id, PagamentoDTO dto){
+    public PagamentoResponseDTO efetuarPagamento(Long id, EfetuarPagamentoDTO dto){
         
         Pagamento entity = PagamentoRepository.findById(id);
         Compra compra = CompraRepository.findByPagamento(entity.getId());

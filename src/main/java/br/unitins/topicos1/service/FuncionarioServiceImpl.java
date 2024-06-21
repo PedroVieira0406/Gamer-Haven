@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.dto.LoginResponseDTO;
 import br.unitins.topicos1.model.Funcionario;
 import br.unitins.topicos1.model.Login;
@@ -50,12 +51,12 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
     @Override
     @Transactional
-    public FuncionarioResponseDTO create(@Valid FuncionarioDTO funcionarioDTO) {
+    public FuncionarioResponseDTO create(@Valid FuncionarioDTO funcionarioDTO,@Valid LoginDTO loginDTO) {
 
         Login login = new Login();
-        login.setName(funcionarioDTO.name());
+        login.setName(loginDTO.name());
         // gereando o hash da senha
-        login.setSenha(hashService.getHashSenha(funcionarioDTO.senha()));
+        login.setSenha(hashService.getHashSenha(loginDTO.senha()));
 
         // salvando o usuario
         loginRepository.persist(login);
@@ -84,8 +85,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         
         funcionarioBanco.setNome(funcionarioDTO.nome());
         funcionarioBanco.setEmail(funcionarioDTO.email());
-        funcionarioBanco.getLogin().setName(funcionarioDTO.name());
-        funcionarioBanco.getLogin().setSenha(hashService.getHashSenha(funcionarioDTO.senha()));
         funcionarioBanco.setCpf(funcionarioDTO.cpf());
         funcionarioBanco.setCargo(funcionarioDTO.cargo());
 

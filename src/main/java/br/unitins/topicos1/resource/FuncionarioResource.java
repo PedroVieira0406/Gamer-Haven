@@ -5,6 +5,7 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.form.ImageForm;
 import br.unitins.topicos1.service.FileServiceFuncionario;
 import br.unitins.topicos1.service.FuncionarioService;
@@ -40,9 +41,9 @@ public class FuncionarioResource {
 
     @POST
     @RolesAllowed("Funcionario")
-    public Response create(FuncionarioDTO dto) {
+    public Response create(FuncionarioDTO dto,LoginDTO dto2) {
         LOG.info("Requisição para criar Funcionario");
-        FuncionarioResponseDTO retorno = service.create(dto);
+        FuncionarioResponseDTO retorno = service.create(dto,dto2);
         LOG.info("Jogo criado com sucesso");
         return Response.status(201).entity(retorno).build();
     }

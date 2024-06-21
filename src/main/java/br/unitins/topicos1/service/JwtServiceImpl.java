@@ -28,7 +28,6 @@ public class JwtServiceImpl implements JwtService {
         return Jwt.issuer("unitins-jwt")
             .subject(dto.name())
             .groups(roles)
-            .claim("loginId",dto.id().toString())
             .expiresAt(expiryDate)
             .sign();
     }

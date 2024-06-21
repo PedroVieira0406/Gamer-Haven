@@ -3,8 +3,10 @@ package br.unitins.topicos1.resource;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
+import br.unitins.topicos1.dto.CadastroClienteDTO;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.dto.UpdatePasswordDTO;
 import br.unitins.topicos1.dto.UpdateUsernameDTO;
 import br.unitins.topicos1.form.ImageForm;
@@ -42,12 +44,22 @@ public class ClienteResource {
 
     @POST
     @RolesAllowed("Funcionario")
-    public Response create(ClienteDTO dto) {
+    public Response create(ClienteDTO dto, LoginDTO dto2) {
         LOG.info("Criando novo Cliente");
-        ClienteResponseDTO retorno = service.create(dto);
+        ClienteResponseDTO retorno = service.create(dto,dto2);
         LOG.info("Cliente criado com sucesso");
         return Response.status(Status.CREATED).entity(retorno).build();
     }
+
+    @POST
+    @Path("/cadastro")
+    public Response cadastro(CadastroClienteDTO dto) {
+        LOG.info("Criando novo Cliente");
+        ClienteResponseDTO retorno = service.cadastro(dto);
+        LOG.info("Cliente criado com sucesso");
+        return Response.status(Status.CREATED).entity(retorno).build();
+    }
+
 
     @PATCH
     @RolesAllowed("Cliente")

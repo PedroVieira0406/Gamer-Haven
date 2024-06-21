@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import br.unitins.topicos1.dto.CadastroClienteDTO;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.dto.LoginResponseDTO;
 import br.unitins.topicos1.dto.UpdatePasswordDTO;
 import br.unitins.topicos1.dto.UpdateUsernameDTO;
@@ -56,11 +58,35 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteResponseDTO create(@Valid ClienteDTO clienteDTO) {
+    public ClienteResponseDTO cadastro(@Valid CadastroClienteDTO clienteDTO) {
         Login login = new Login();
         login.setName(clienteDTO.name());
         // gereando o hash da senha
         login.setSenha(hashService.getHashSenha(clienteDTO.senha()));
+
+        // salvando o usuario
+        loginRepository.persist(login);
+
+
+        Cliente entity = new Cliente();
+        entity.setNome(clienteDTO.nome());
+        entity.setCpf(clienteDTO.cpf());
+        entity.setEmail(clienteDTO.email());
+        entity.setIdade(clienteDTO.idade());
+        entity.setLogin(login);
+
+        clienteRepository.persist(entity);
+
+        return ClienteResponseDTO.valueOf(entity);
+    }
+
+    @Override
+    @Transactional
+    public ClienteResponseDTO create(@Valid ClienteDTO clienteDTO, @Valid LoginDTO loginDTO) {
+        Login login = new Login();
+        login.setName(loginDTO.name());
+        // gereando o hash da senha
+        login.setSenha(hashService.getHashSenha(loginDTO.senha()));
 
         // salvando o usuario
         loginRepository.persist(login);
@@ -90,9 +116,8 @@ public class ClienteServiceImpl implements ClienteService {
         
         ClienteBanco.setNome(ClienteDTO.nome());
         ClienteBanco.setEmail(ClienteDTO.email());
-        ClienteBanco.getLogin().setName(ClienteDTO.name());
-        ClienteBanco.getLogin().setSenha(hashService.getHashSenha(ClienteDTO.senha())); 
         ClienteBanco.setCpf(ClienteDTO.cpf());
+        ClienteBanco.setIdade(ClienteDTO.idade());
 
         return ClienteResponseDTO.valueOf(ClienteBanco);
     }
@@ -103,7 +128,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente cliente = clienteRepository.findById(id);
         String hashSenhaAntiga = hashService.getHashSenha(dto.oldPassword());
-
+        if(dto.newPassword() != dto.newPassword2())throw new ValidationException("ERRO", "Senhas nao comprativeis");
         if (cliente != null) {
             if (cliente.getLogin().getSenha().equals(hashSenhaAntiga)) {
                 String hashNovaSenha = hashService.getHashSenha(dto.newPassword());

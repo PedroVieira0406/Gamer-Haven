@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.LoginResponseDTO;
+import br.unitins.topicos1.dto.UpdatePasswordDTO;
+import br.unitins.topicos1.dto.UpdateUsernameDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Login;
 import br.unitins.topicos1.repository.ClienteRepository;
@@ -20,6 +22,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class ClienteServiceImpl implements ClienteService {
@@ -92,6 +95,38 @@ public class ClienteServiceImpl implements ClienteService {
         ClienteBanco.setCpf(ClienteDTO.cpf());
 
         return ClienteResponseDTO.valueOf(ClienteBanco);
+    }
+
+        @Override
+    @Transactional
+    public void updatePassword(Long id, UpdatePasswordDTO dto) {
+
+        Cliente cliente = clienteRepository.findById(id);
+        String hashSenhaAntiga = hashService.getHashSenha(dto.oldPassword());
+
+        if (cliente != null) {
+            if (cliente.getLogin().getSenha().equals(hashSenhaAntiga)) {
+                String hashNovaSenha = hashService.getHashSenha(dto.newPassword());
+                cliente.getLogin().setSenha(hashNovaSenha);
+            } else {
+                throw new ValidationException("ERRO", "Senha antiga nao corresponde");
+            }
+        } else {
+            throw new NotFoundException();
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateUsername(Long id, UpdateUsernameDTO dto) {
+
+        Cliente cliente = clienteRepository.findById(id);
+
+        if (cliente != null) {
+            cliente.getLogin().setName(dto.newUsername());;
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     public void validarNomeCliente(String nome) {

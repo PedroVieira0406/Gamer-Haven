@@ -52,7 +52,7 @@ public class CompraServiceImpl implements CompraService {
         compra.setPreco(valor);
 
         //verificando se já tem o jogo na biblioteca de quem receberá o jogo
-        if (jogoJaNaBiblioteca(compra.getDono(), compra.getJogo().getId())) {
+        if (jogoNaBiblioteca(compra.getDono(), compra.getJogo().getId())) {
             throw new IllegalStateException("O jogo já está na biblioteca do dono.");
         }
 
@@ -63,8 +63,7 @@ public class CompraServiceImpl implements CompraService {
         pagamento.setCartao(null);
         pagamento.setModoPagamento(ModoPagamento.valueOf(1));
         pagamento.setStatus(false);
-        if(valor == 0.0)
-        pagamento.setStatus(true);
+        if(valor == 0.0f) pagamento.setStatus(true);
 
         pagamentoRepository.persist(pagamento);
         compra.setPagamento(pagamento);
@@ -96,14 +95,12 @@ public class CompraServiceImpl implements CompraService {
         biblioteca.add(compra.getJogo());
         cliente.setBiblioteca(biblioteca);
 
-        clienteRepository.persist(cliente); // Persiste as mudanças na biblioteca do cliente
-
         } else {
             throw new NotFoundException("Pagamento não encontrado para o pagamento fornecido.");
         }
     }
 
-    private boolean jogoJaNaBiblioteca(Cliente dono, Long idJogo) {
+    private boolean jogoNaBiblioteca(Cliente dono, Long idJogo) {
         if (dono.getBiblioteca() != null) {
             for (Jogo jogo : dono.getBiblioteca()) {
                 if (jogo.getId().equals(idJogo)) {

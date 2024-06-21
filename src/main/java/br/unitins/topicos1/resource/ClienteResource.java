@@ -5,6 +5,8 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.UpdatePasswordDTO;
+import br.unitins.topicos1.dto.UpdateUsernameDTO;
 import br.unitins.topicos1.form.ImageForm;
 import br.unitins.topicos1.service.ClienteService;
 import br.unitins.topicos1.service.FileServiceCliente;
@@ -39,11 +41,30 @@ public class ClienteResource {
     private static final Logger LOG = Logger.getLogger(ClienteResource.class);
 
     @POST
+    @RolesAllowed("Funcionario")
     public Response create(ClienteDTO dto) {
         LOG.info("Criando novo Cliente");
         ClienteResponseDTO retorno = service.create(dto);
         LOG.info("Cliente criado com sucesso");
         return Response.status(Status.CREATED).entity(retorno).build();
+    }
+
+    @PATCH
+    @RolesAllowed("Cliente")
+    @Path("/update-password/{id}")
+    public Response updateUsuarioSenha(@PathParam("id") Long id, UpdatePasswordDTO dto){
+        LOG.info("Atualizando senha");
+        service.updatePassword(id, dto);
+        return Response.status(Status.NO_CONTENT).build();
+    }
+
+    @PATCH
+    @RolesAllowed("Cliente")
+    @Path("/update-username/{id}")
+    public Response updateUsuarioUsername(@PathParam("id") Long id, UpdateUsernameDTO dto){
+        LOG.info("Atualizando username");
+        service.updateUsername(id, dto);
+        return Response.status(Status.NO_CONTENT).build();
     }
 
     @PUT
@@ -113,8 +134,6 @@ public class ClienteResource {
     @Path("/image/download/{nomeImagem}")
     public Response download(@PathParam("nomeImagem") String nomeImagem) {
         LOG.infof("Fazendo download da imagem: " + nomeImagem);
-        return Response.ok(fileService.download(nomeImagem))
-                       .header("Content-Disposition", "attachment;filename=" + nomeImagem)
-                       .build();
+        return Response.ok(fileService.download(nomeImagem)).header("Content-Disposition", "attachment;filename=" + nomeImagem).build();
     }
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.LoginResponseDTO;
+import br.unitins.topicos1.dto.UpdatePasswordDTO;
+import br.unitins.topicos1.dto.UpdateUsernameDTO;
 import jakarta.validation.Valid;
 
 public interface ClienteService {
@@ -13,6 +15,8 @@ public interface ClienteService {
     ClienteResponseDTO findById(Long id);
     ClienteResponseDTO create (@Valid ClienteDTO dto);
     ClienteResponseDTO update(Long id, ClienteDTO dto);
+    void updateUsername(Long id, UpdateUsernameDTO dto);
+    void updatePassword(Long id, UpdatePasswordDTO dto);
     void delete(Long id);
     
     List<ClienteResponseDTO> findByNome(String nome);

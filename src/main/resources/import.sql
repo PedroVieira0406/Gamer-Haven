@@ -74,8 +74,8 @@ VALUES
 -- Cartao
 INSERT INTO cartao (cartaoMarca, nCartao, mesValid, anoValid, numSeguranca, nome, sobrenome, cep, cidade, pais, idCLiente)
 VALUES
-    ('VISA', '1234567890123456', 12, 2024, 'j+Z+xmgZtP05avyaIysXHHnNH/N4LFtr6WCgYGgpMciYGzWUtilGg1bl7LQ2n4sadR/BQJEXjMrk1XRFg2jMSg==', 'roberto', 'Silva', 'São Paulo', '12345-678', 'Brasil', 1),
-    ('JCB', '1231544820132932', 9, 2025, 'j+Z+xmgZtP05avyaIysXHHnNH/N4LFtr6WCgYGgpMciYGzWUtilGg1bl7LQ2n4sadR/BQJEXjMrk1XRFg2jMSg==', 'Carla', 'Andrade', 'Rio de Janeiro', '54321-678', 'Brasil', 2);
+    ('VISA', '1234567890123456', 12, 2024, 'j+Z+xmgZtP05avyaIysXHHnNH/N4LFtr6WCgYGgpMciYGzWUtilGg1bl7LQ2n4sadR/BQJEXjMrk1XRFg2jMSg==', 'roberto', 'Silva','12345-678', 'São Paulo', 'Brasil', 1),
+    ('JCB', '1231544820132932', 9, 2025, 'j+Z+xmgZtP05avyaIysXHHnNH/N4LFtr6WCgYGgpMciYGzWUtilGg1bl7LQ2n4sadR/BQJEXjMrk1XRFg2jMSg==', 'Carla', 'Andrade', '54321-678', 'Rio de Janeiro', 'Brasil', 2);
 
 -- Pagamento
 INSERT INTO pagamento( cliente_id, status,valorcompra, valorPago, modoPagamento, cartao_id)

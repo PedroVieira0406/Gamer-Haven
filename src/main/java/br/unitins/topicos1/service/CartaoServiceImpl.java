@@ -1,4 +1,6 @@
 package br.unitins.topicos1.service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -6,6 +8,7 @@ import br.unitins.topicos1.dto.CartaoDTO;
 import br.unitins.topicos1.dto.CartaoResponseDTO;
 import br.unitins.topicos1.model.Cartao;
 import br.unitins.topicos1.model.CartaoMarca;
+import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.repository.CartaoRepository;
 import br.unitins.topicos1.repository.ClienteRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -65,9 +68,17 @@ public class CartaoServiceImpl implements CartaoService {
             entity.setCep(dto.cep());
             entity.setCidade(dto.cidade());
             entity.setPais(dto.pais());
-            entity.setCliente(ClienteRepository.findById(dto.dono()));
 
+            Cliente cliente = ClienteRepository.findById(dto.dono());
+            entity.setCliente(cliente);
             CartaoRepository.persist(entity);
+
+            //Colocando o cartão dentro do cliente
+            List<Cartao> cartoes= cliente.getCartoes();
+            if(cartoes==null) cartoes = new ArrayList<>();
+            cartoes.add(entity);
+            cliente.setCartoes(cartoes);
+            
         return CartaoResponseDTO.valueOf(entity);
     }
     @Override

@@ -10,9 +10,6 @@ public record EfetuarPagamentoDTO(
     @Positive(message = "O valor pago deve ser positivo.")
     Float valorPago,
 
-    @NotNull(message = "O id do cliente deve ser informado.")
-    Long idCliente,
-
     @NotNull(message = "O modo de pagamento deve ser informado.")
     Integer modoPagamento,
 

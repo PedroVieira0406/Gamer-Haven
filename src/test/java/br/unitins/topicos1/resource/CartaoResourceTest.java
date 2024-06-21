@@ -66,7 +66,7 @@ public class CartaoResourceTest {
     @Test
     public void deleteTest() {
 
-        CartaoResponseDTO response = cartaoService.create(new CartaoDTO(2, "9876543210987654", 10, 2025, "542'", "Maria", "Santos", "54321-987", "Rio de Janeiro", "Brasil", 2L));
+        CartaoResponseDTO response = cartaoService.create(new CartaoDTO(2, "9876543210987654", 10, 2025, "542", "Maria", "Santos", "54321-987", "Rio de Janeiro", "Brasil", 2L));
         given()
         .header("Authorization", clienteToken)
             .when()

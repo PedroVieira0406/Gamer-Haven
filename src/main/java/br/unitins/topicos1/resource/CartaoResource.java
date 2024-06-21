@@ -32,7 +32,7 @@ public class CartaoResource {
     private static final Logger LOG = Logger.getLogger(CartaoResource.class);
 
     @POST
-    @RolesAllowed("Cliente")
+    @RolesAllowed({"Cliente","Funcionario"})
     public Response create(CartaoDTO dto) {
         LOG.info("Requisição para criar Cartao recebida");
         CartaoResponseDTO retorno = service.create(dto);
@@ -42,7 +42,7 @@ public class CartaoResource {
 
     @PUT
     @Transactional
-    @RolesAllowed("Cliente")
+    @RolesAllowed({"Cliente","Funcionario"})
     @Path("/update/{id}")
     public Response update(CartaoDTO dto, @PathParam("id") Long id) {
         LOG.infof("Requisição para atualizar Cartao com ID: " + id + " recebida");
@@ -53,7 +53,7 @@ public class CartaoResource {
 
     @DELETE
     @Transactional
-    @RolesAllowed("Cliente")
+    @RolesAllowed({"Cliente","Funcionario"})
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id) {
         LOG.infof("Requisição para deletar Cartao com ID: " + id + " recebida");

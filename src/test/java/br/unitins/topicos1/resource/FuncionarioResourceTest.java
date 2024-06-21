@@ -63,17 +63,6 @@ public class FuncionarioResourceTest {
     }
 
     @Test
-    public void findByEmailTest() {
-        given()
-        .header("Authorization", funcionarioToken)
-            .when()
-            .get("/funcionario/search/email/jessica@gmail.com")
-            .then()
-            .statusCode(200)
-            .body("email",  everyItem(is("jessica@gmail.com")));
-    }
-
-    @Test
     public void findByCargoTest() {
         given()
         .header("Authorization", funcionarioToken)

@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import br.unitins.topicos1.dto.CadastroClienteDTO;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.dto.LoginResponseDTO;
 import br.unitins.topicos1.dto.UpdatePasswordDTO;
 import br.unitins.topicos1.dto.UpdateUsernameDTO;
@@ -58,7 +56,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteResponseDTO cadastro(@Valid CadastroClienteDTO clienteDTO) {
+    public ClienteResponseDTO cadastro(@Valid ClienteDTO clienteDTO) {
+        if(loginRepository.findByUsername(clienteDTO.name())!=null)
+            throw new ValidationException("Error", "Username já utilzado");
         Login login = new Login();
         login.setName(clienteDTO.name());
         // gereando o hash da senha
@@ -82,11 +82,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteResponseDTO create(@Valid ClienteDTO clienteDTO, @Valid LoginDTO loginDTO) {
+    public ClienteResponseDTO create(@Valid ClienteDTO clienteDTO) {
+        if(loginRepository.findByUsername(clienteDTO.name())!=null)
+            throw new ValidationException("Error", "Username já utilzado");
         Login login = new Login();
-        login.setName(loginDTO.name());
+        login.setName(clienteDTO.name());
         // gereando o hash da senha
-        login.setSenha(hashService.getHashSenha(loginDTO.senha()));
+        login.setSenha(hashService.getHashSenha(clienteDTO.senha()));
 
         // salvando o usuario
         loginRepository.persist(login);
@@ -164,7 +166,6 @@ public class ClienteServiceImpl implements ClienteService {
         Set<ConstraintViolation<ClienteDTO>> violations = validator.validate(clienteDTO);
         if (!violations.isEmpty())
             throw new ConstraintViolationException(violations);
-
     }
 
     @Override
@@ -184,7 +185,6 @@ public class ClienteServiceImpl implements ClienteService {
         List<Cliente> list = clienteRepository.findByEmail(email).list();
         return list.stream().map(e -> ClienteResponseDTO.valueOf(e)).collect(Collectors.toList());
     }
-
     @Override
     public long count() {
         return clienteRepository.count();

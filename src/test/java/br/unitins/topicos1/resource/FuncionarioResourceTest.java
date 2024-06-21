@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.service.FuncionarioService;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -64,6 +63,17 @@ public class FuncionarioResourceTest {
     }
 
     @Test
+    public void findByEmailTest() {
+        given()
+        .header("Authorization", funcionarioToken)
+            .when()
+            .get("/funcionario/search/email/jessica@gmail.com")
+            .then()
+            .statusCode(200)
+            .body("email",  everyItem(is("jessica@gmail.com")));
+    }
+
+    @Test
     public void findByCargoTest() {
         given()
         .header("Authorization", funcionarioToken)
@@ -74,10 +84,9 @@ public class FuncionarioResourceTest {
             .body("cargo", everyItem(is("Administrador")));
     }
 
-
     @Test
     public void updateTest() {
-        FuncionarioDTO dto = new FuncionarioDTO("Carlos Oliveira","carlos@gmail.com","98765432101","Analista");
+        FuncionarioDTO dto = new FuncionarioDTO("Caca","Bueno","Carlos Oliveira","carlos@gmail.com","98765432101","Analista");
         given()
         .header("Authorization", funcionarioToken)
             .contentType(MediaType.APPLICATION_JSON)
@@ -87,14 +96,11 @@ public class FuncionarioResourceTest {
             .put("/funcionarios/update/{id}")
             .then()
             .statusCode(204);
-  
     }
 
     @Test
     public void deleteTest() {
-        FuncionarioResponseDTO response = funcionarioService
-        .create(new FuncionarioDTO("Juliana Silva", "juliana@gmail.com", "98765423101", "Desenvolvedor"),
-                new LoginDTO("Jujuba", "lilybrotin"));
+        FuncionarioResponseDTO response = funcionarioService.create(new FuncionarioDTO("Jujuba","lilybrotin", "Juliana Silva", "juliana@gmail.com", "98765493101", "Desenvolvedor"));
         given()
         .header("Authorization", funcionarioToken)
             .when()
@@ -102,8 +108,7 @@ public class FuncionarioResourceTest {
             .delete("/funcionarios/delete/{id}")
             .then()
             .statusCode(204);
-  
 
-        funcionarioService.delete(response.id());
+            funcionarioService.delete(response.id());
         }
 }

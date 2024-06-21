@@ -8,7 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class LoginRepository implements PanacheRepository<Login> {
 
     public Login findByUsername(String name) {
-        return find("UPPER(username) = ?1", name).firstResult();
+        return find("UPPER(name) = ?1", name).firstResult();
     }
 
 }

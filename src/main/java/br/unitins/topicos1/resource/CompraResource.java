@@ -41,6 +41,17 @@ public class CompraResource {
 
     @PUT
     @Transactional
+    @RolesAllowed("Funcionario")
+    @Path("/update/{id}")
+    public Response update(CompraDTO dto, @PathParam("id") Long id) {
+        LOG.infof("Atualizando compra com ID: " + id);
+        service.update(dto,id);
+        LOG.infof("Compra com ID: " + id + " atualizado com sucesso");
+        return Response.status(Status.NO_CONTENT).build();
+    }
+
+    @PUT
+    @Transactional
     @RolesAllowed({"Cliente","Funcionario"})
     @Path("/ativacao/id/{id}")
     public Response ativarJogo(@PathParam("id") Long id){

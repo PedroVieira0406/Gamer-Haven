@@ -21,6 +21,12 @@ public class FuncionarioRepository implements PanacheRepository<Funcionario> {
         return find("UPPER(nome) LIKE ?1", "%"+ cargo.toUpperCase() + "%");
     }
 
+    public PanacheQuery<Funcionario> findByEmail(String email) {
+        if(email == null)
+            return null;
+        return find("UPPER(email) LIKE ?1", "%"+ email.toUpperCase() + "%");
+    }
+
     public Funcionario findByNomeCompleto(String nome) {
         return find("UPPER(nome) = ?1",  nome.toUpperCase() ).firstResult();
     }

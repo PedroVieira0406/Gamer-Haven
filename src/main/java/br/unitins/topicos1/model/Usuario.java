@@ -13,7 +13,7 @@ public class Usuario extends DefaultEntity {
     @Column(length = 60, nullable = false)
     private String nome;
 
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(length = 50, nullable = false)
     private String email;
 
     @Column(length = 15, nullable = false, unique = true)

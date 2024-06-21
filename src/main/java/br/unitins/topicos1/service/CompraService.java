@@ -10,6 +10,8 @@ public interface CompraService {
 
     CompraResponseDTO create(@Valid CompraDTO dto);
     CompraResponseDTO findById(Long id);
+    CompraResponseDTO update(@Valid CompraDTO dto, Long id);
+    void delete(Long id);
     void ativandoJogo(Long idPagamento);
     List<CompraResponseDTO> getAll();
     List<CompraResponseDTO> findAll();

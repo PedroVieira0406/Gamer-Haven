@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.dto.LoginResponseDTO;
 import br.unitins.topicos1.model.Funcionario;
 import br.unitins.topicos1.model.Login;
@@ -51,12 +50,16 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
     @Override
     @Transactional
-    public FuncionarioResponseDTO create(@Valid FuncionarioDTO funcionarioDTO,@Valid LoginDTO loginDTO) {
+    public FuncionarioResponseDTO create(@Valid FuncionarioDTO funcionarioDTO) {
+
+        if(loginRepository.findByUsername(funcionarioDTO.name())!=null){
+            throw new ValidationException("Error", "Username já utilzado");
+        }
 
         Login login = new Login();
-        login.setName(loginDTO.name());
+        login.setName(funcionarioDTO.name());
         // gereando o hash da senha
-        login.setSenha(hashService.getHashSenha(loginDTO.senha()));
+        login.setSenha(hashService.getHashSenha(funcionarioDTO.senha()));
 
         // salvando o usuario
         loginRepository.persist(login);
@@ -136,8 +139,15 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         return funcionarioRepository.findByNome(nome).count();
     }
 
+    @Override
+    public List<FuncionarioResponseDTO> findByEmail(String email) {
+        List<Funcionario> list = funcionarioRepository.findByEmail(email).list();
+        return list.stream().map(e -> FuncionarioResponseDTO.valueOf(e)).collect(Collectors.toList());
+    }
+
     public LoginResponseDTO login(String name, String senha) {
         Funcionario funcionario = funcionarioRepository.findByUsernameAndSenha(name, senha);
         return LoginResponseDTO.valueOf(funcionario.getLogin());
     }
+
 }

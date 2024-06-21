@@ -7,7 +7,7 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Login extends DefaultEntity {
 
-    @Column(length = 30, nullable = false, unique = true)
+    @Column(length = 30, nullable = false)
     private String name;
 
     @Column(length = 255, nullable=false)

@@ -13,6 +13,6 @@ public class PagamentoRepository implements PanacheRepository<Pagamento> {
         if (idCliente == null) {
             return null;
         }
-        return find("cliente.id", idCliente);
+        return find("clienteId", idCliente);
     }
 }

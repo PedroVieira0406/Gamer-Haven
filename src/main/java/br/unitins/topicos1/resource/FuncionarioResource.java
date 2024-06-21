@@ -5,7 +5,6 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.form.ImageForm;
 import br.unitins.topicos1.service.FileServiceFuncionario;
 import br.unitins.topicos1.service.FuncionarioService;
@@ -41,9 +40,9 @@ public class FuncionarioResource {
 
     @POST
     @RolesAllowed("Funcionario")
-    public Response create(FuncionarioDTO dto,LoginDTO dto2) {
+    public Response create(FuncionarioDTO dto) {
         LOG.info("Requisição para criar Funcionario");
-        FuncionarioResponseDTO retorno = service.create(dto,dto2);
+        FuncionarioResponseDTO retorno = service.create(dto);
         LOG.info("Jogo criado com sucesso");
         return Response.status(201).entity(retorno).build();
     }
@@ -94,6 +93,14 @@ public class FuncionarioResource {
     public Response findByCargo(@PathParam("cargo") String nome) {
         LOG.infof("Requisição para buscar Funcionario pelo cargo: " + nome + " recebida");
         return Response.ok(service.findByCargo(nome)).build();
+    }
+
+    @GET
+    @RolesAllowed("Funcionario")
+    @Path("/search/email/{email}")
+    public Response findByEmail(@PathParam("email") String email) {
+        LOG.infof("Buscando Funcionario pelo email: " + email);
+        return Response.ok(service.findByEmail(email)).build();
     }
 
     @PATCH

@@ -25,7 +25,7 @@ public class FuncionarioFileServiceImpl implements FileServiceFuncionario {
 
     @Inject
     FuncionarioRepository FuncionarioRepository;
- 
+
     @Override
     @Transactional
     public void salvar(Long id, String nomeImagem, byte[] imagem) {
@@ -51,19 +51,19 @@ public class FuncionarioFileServiceImpl implements FileServiceFuncionario {
         
         // criar pasta quando nao existir
         File diretorio = new File(PATH_USER);
-        if (!diretorio.exists()) 
+        if (!diretorio.exists())
             diretorio.mkdirs();
 
-        // gerar nome do arquivo 
-        String nomeArquivo = UUID.randomUUID() 
-                                + "." 
+        // gerar nome do arquivo
+        String nomeArquivo = UUID.randomUUID()
+                                + "."
                                 + mimeType.substring(mimeType.lastIndexOf("/") + 1);
         String path = PATH_USER + nomeArquivo;
 
         // salvar o arquivo
         File file = new File(path);
         if (file.exists())
-          throw new IOException("Este arquivo ja existe. Programador, tu deve melhorar esse codigo");
+        throw new IOException("Este arquivo ja existe. Programador, tu deve melhorar esse codigo");
 
         // criar o arquivo no SO
         file.createNewFile();
@@ -78,7 +78,7 @@ public class FuncionarioFileServiceImpl implements FileServiceFuncionario {
 
     @Override
     public File download(String nomeImagem) {
-       return new File(PATH_USER + nomeImagem);
+        return new File(PATH_USER + nomeImagem);
     }
     
 }

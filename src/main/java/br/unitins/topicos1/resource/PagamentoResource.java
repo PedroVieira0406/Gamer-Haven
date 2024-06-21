@@ -24,7 +24,7 @@ import jakarta.ws.rs.core.Response.Status;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 
-@Path("/Pagamentos")
+@Path("/pagamentos")
 public class PagamentoResource {
 
     @Inject

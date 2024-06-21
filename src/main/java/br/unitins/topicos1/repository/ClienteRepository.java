@@ -17,8 +17,9 @@ public class ClienteRepository implements PanacheRepository<Cliente> {
     public PanacheQuery<Cliente> findByEmail(String email) {
         if(email == null)
             return null;
-        return find("UPPER(nome) LIKE ?1", "%"+ email.toUpperCase() + "%");
+        return find("UPPER(email) LIKE ?1", "%"+ email.toUpperCase() + "%");
     }
+
     public Cliente findByNomeCompleto(String nome) {
         return find("UPPER(nome) = ?1",  nome.toUpperCase() ).firstResult();
     }

@@ -1,0 +1,119 @@
+@startuml ecommerce
+class Usuario{
+  - nome: String
+  - email: String
+  - cpf: String
+  - nomeImagem : String
+  - Login : Long
+}
+
+class Login{
+    -Username: String
+    -Senha: String
+}
+
+class Funcionario{
+  - cargo: String 
+}
+
+class Cliente{
+  -  idade : Integer
+}
+
+
+class Jogo{
+  - nome: String
+  - preco: Float
+  - descont: Float
+  - faixaEtaria: Integer
+  - empresa: long
+}
+
+enum FaixaEtaria{
+  + Livre : Integer
+  + +10 : Integer
+  + +12 : Integer
+  + +14 : Integer
+  + +16 : Integer
+  + +18 : Integer
+
+  - FaixaEtaria(int id, String faixaEtaria)
+}
+
+class Empresa{
+  - nome: String
+  - cnpj: String
+  - email: String
+}
+
+class Pagamento{
+  - pagante: Long
+  - jogo: Long
+  - dono: Long
+  - valorCompra: Float
+  - valorPago: Float
+  - status: boolean
+  - cartao: Long
+}
+
+enum ModoPagamento{
+  + PIX : int
+  + DEBITO : int
+  + CREDITO : int
+  - FormaPagamento(int id, String pagamento)
+}
+
+class Cartao{
+  - nome : String
+  - sobrenome: String
+  - numero : String
+  - mesValid: Integer
+  - anoValid: Integer
+  - cidade: String
+  - pais: String
+  - NumSeguranca : String
+  - cliente : Long
+}
+
+class Tema{
+ - nome: String
+}
+
+class Compra{
+  - preco : Float
+  - pagante : Long
+  - dono : Long
+  - jogo : Long
+}
+
+
+enum CartaoMarca{
+  + VISA : int
+  + MASTERCARD : int
+  + JCB : int
+  - CataoMarca(int id, String pagamento)
+}
+
+class Plataforma{
+ - nome : String
+}
+
+Jogo "*" *--> "*" Plataforma
+Jogo "*" *--> "1" FaixaEtaria
+Jogo "*" *--> "*" Tema
+Jogo "*" *--> "1" Empresa
+
+Cliente "1" --|> "1" Usuario
+Funcionario "1" --|> "1" Usuario
+Usuario "1" --> "1" Login
+
+Cliente "*" *--> "1" Cartao
+Cartao "*" *--> "1" CartaoMarca
+
+Compra "*" *--> "*" Jogo
+Compra "*" o--> "*" Cliente
+Compra "1" *--> "1" Pagamento
+Pagamento "*" *--> "1" ModoPagamento
+Pagamento "*" --> "0..1" Cartao
+
+@enduml

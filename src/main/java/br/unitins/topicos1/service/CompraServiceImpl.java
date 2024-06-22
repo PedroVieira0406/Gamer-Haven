@@ -37,11 +37,11 @@ public class CompraServiceImpl implements CompraService {
     @Inject
     public PagamentoRepository pagamentoRepository;
 
-
     @Override
     @Transactional
     public CompraResponseDTO create(@Valid CompraDTO dto){
-        Compra compra = new Compra();  
+        Compra compra = new Compra();
+
         compra.setPagante(acharPagante(dto.idPagante()));
         compra.setDono(acharDono(dto.idDono()));
         compra.setJogo(acharJogo(dto.idJogo()));
